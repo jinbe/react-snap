@@ -27,13 +27,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crawl = exports.makeCancelable = exports.getLinks = exports.enableLogging = exports.skipThirdPartyRequests = void 0;
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const puppeteer_1 = __importStar(require("puppeteer"));
 const puppeteer_cluster_1 = require("puppeteer-cluster");
 const puppeteer_extra_1 = require("puppeteer-extra");
 const puppeteer_extra_plugin_block_resources_1 = __importDefault(require("puppeteer-extra-plugin-block-resources"));
 const url_1 = __importDefault(require("url"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
 const tracker_1 = require("./tracker");
 const mapStackTrace = require("sourcemapped-stacktrace-node").default;
 const puppeteerWithExtra = (0, puppeteer_extra_1.addExtra)(puppeteer_1.default);
@@ -206,7 +206,7 @@ const pageRetries = {};
 const crawl = async (opt) => {
     var _a;
     const { options, basePath, beforeFetch, afterFetch, onEnd, publicPath, sourceDir } = opt;
-    const exclude = options.exclude;
+    const exclude = options.exclude.map(e => RegExp(e));
     let shuttingDown = false;
     let streamClosed = false;
     const onSigint = () => {

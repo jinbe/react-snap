@@ -1,13 +1,12 @@
-import puppeteer, {DEFAULT_INTERCEPT_RESOLUTION_PRIORITY, HTTPResponse, Puppeteer} from "puppeteer";
-import {Cluster} from "puppeteer-cluster"
-import { addExtra, VanillaPuppeteer } from "puppeteer-extra";
-import blockResourcesPlugin from "puppeteer-extra-plugin-block-resources"
-import url from "url";
-import path from "path";
 import fs from "fs";
-import shell from "shelljs";
-import { createTracker, augmentTimeoutError } from "./tracker";
-import {ICrawlParams, IEnableLoggingOptions, IReactSnapRunLogs} from "./model";
+import path from "path";
+import puppeteer, { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY, HTTPResponse } from "puppeteer";
+import { Cluster } from "puppeteer-cluster";
+import { VanillaPuppeteer, addExtra } from "puppeteer-extra";
+import blockResourcesPlugin from "puppeteer-extra-plugin-block-resources";
+import url from "url";
+import { ICrawlParams, IEnableLoggingOptions, IReactSnapRunLogs } from "./model";
+import { augmentTimeoutError, createTracker } from "./tracker";
 const mapStackTrace = require("sourcemapped-stacktrace-node").default;
 
 const puppeteerWithExtra = addExtra(puppeteer as unknown as VanillaPuppeteer);
@@ -215,7 +214,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
     publicPath,
     sourceDir
   } = opt;
-  const exclude = options.exclude;
+  const exclude = options.exclude.map(e => RegExp(e));
   let shuttingDown = false;
   let streamClosed = false;
 
