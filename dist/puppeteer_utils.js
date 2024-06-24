@@ -265,6 +265,7 @@ const crawl = async (opt) => {
         if (basePathHostname === hostname && isOnAppPort && (notUnique || !uniqueUrls.has(newUrl)) && !streamClosed) {
             if (!notUnique)
                 uniqueUrls.add(newUrl);
+            console.log("Q  enqueue", newUrl);
             enqueued++;
             await cluster.queue(newUrl);
             if (enqueued > 1 && options.crawl && !added404) {

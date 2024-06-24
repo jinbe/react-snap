@@ -282,6 +282,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
     if (exclude.filter(regex => regex.test(pathname)).length > 0) return;
     if (basePathHostname === hostname && isOnAppPort && (notUnique || !uniqueUrls.has(newUrl)) && !streamClosed) {
       if (!notUnique) uniqueUrls.add(newUrl);
+      console.log("Q  enqueue", newUrl);
       enqueued++;
       await cluster.queue(newUrl);
       if (enqueued > 1 && options.crawl && !added404) {
