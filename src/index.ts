@@ -1,20 +1,20 @@
 require("setimmediate");
 
-import {defaults} from "./defaults";
-import {crawl} from "./puppeteer_utils";
-import http from "http";
-import express from "express";
-import serveStatic from "serve-static";
-import fallback from "express-history-api-fallback";
-import path from "path";
-import nativeFs from "fs";
-import mkdirp from "mkdirp";
-import {minify} from "html-minifier";
-import url from "url";
-import minimalcss from "minimalcss";
 import CleanCSS from "clean-css";
+import express from "express";
+import fallback from "express-history-api-fallback";
+import nativeFs from "fs";
+import { minify } from "html-minifier";
+import http from "http";
 import { round } from "lodash";
-import {IInlineCssParams, IReactSnapOptions, ISaveAsParams, ReactSnapRunInfo, ICrawlParams} from "./model";
+import minimalcss from "minimalcss";
+import mkdirp from "mkdirp";
+import path from "path";
+import serveStatic from "serve-static";
+import url from "url";
+import { defaults } from "./defaults";
+import { IInlineCssParams, IReactSnapOptions, ISaveAsParams, ReactSnapRunInfo } from "./model";
+import { crawl } from "./puppeteer_utils";
 
 const {
   version
@@ -837,7 +837,7 @@ export const run = async (userOptions: IReactSnapOptions, { fs } = { fs: nativeF
           const redirect = `${routePath} -> ${newRoute}`;
           redirects.push(redirect);
           console.log(`💬  in browser redirect (${redirect})`);
-          await addToQueue(`${basePath}${publicPath}${newRoute}`);
+          await addToQueue(`${basePath}${publicPath}${newRoute}`, false);
         }
       }
 
@@ -881,4 +881,4 @@ export const run = async (userOptions: IReactSnapOptions, { fs } = { fs: nativeF
   return [paths, allLogs];
 };
 
-export {IReactSnapOptions, ReactSnapRunInfo};
+export { IReactSnapOptions, ReactSnapRunInfo };

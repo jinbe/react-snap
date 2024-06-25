@@ -1,8 +1,8 @@
 /// <reference types="clean-css" />
 /// <reference types="node" />
-import puppeteer, { HTTPResponse, Page, PuppeteerLifeCycleEvent } from "puppeteer";
 import nativeFs from "fs";
 import { Options } from "html-minifier-terser";
+import puppeteer, { HTTPResponse, Page, PuppeteerLifeCycleEvent } from "puppeteer";
 import type CleanCSS from "@types/clean-css";
 import type { Cluster } from "puppeteer-cluster";
 declare global {
@@ -119,7 +119,7 @@ export interface ICrawlParams {
     afterFetch(params: {
         page: puppeteer.Page;
         route: string;
-        addToQueue: (newUrl: string) => Promise<void>;
+        addToQueue: (newUrl: string, notUnique: boolean) => Promise<void>;
         logs: string[];
     }): any;
     onEnd(): void;

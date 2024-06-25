@@ -269,7 +269,7 @@ const crawl = async (opt) => {
             await cluster.queue(newUrl);
             if (enqueued > 1 && options.crawl && !added404) {
                 added404 = true;
-                await addToQueue(`${basePath}${publicPath}/404.html`);
+                await addToQueue(`${basePath}${publicPath}/404.html`, false);
             }
         }
     };
@@ -337,7 +337,7 @@ const crawl = async (opt) => {
                     await page.waitForTimeout(options.waitFor);
                 if (options.crawl) {
                     const links = await (0, exports.getLinks)({ page });
-                    await Promise.all(links.map(addToQueue));
+                    await Promise.all(links.map((l) => addToQueue(l, false)));
                 }
                 afterFetch && (await afterFetch({ page, route, addToQueue, logs }));
                 crawled = true;
@@ -393,7 +393,7 @@ const crawl = async (opt) => {
     };
     await cluster.task(async ({ page, data: pageUrl }) => await fetchPage(page, pageUrl));
     if (options.include) {
-        await Promise.all(options.include.map(x => addToQueue(`${basePath}${x}`)));
+        await Promise.all(options.include.map(x => addToQueue(`${basePath}${x}`, false)));
     }
     waitForIdle = (0, exports.makeCancelable)(cluster.idle());
     try {

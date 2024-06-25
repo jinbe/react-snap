@@ -267,7 +267,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
    * @param {string} newUrl
    * @returns {void}
    */
-  const addToQueue = async (newUrl: string, notUnique?: boolean) => {
+  const addToQueue = async (newUrl: string, notUnique: boolean) => {
     const { hostname, search, hash, port, pathname } = url.parse(newUrl);
     newUrl = newUrl.replace(`${search || ""}${hash || ""}`, "");
 
@@ -287,7 +287,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
       await cluster.queue(newUrl);
       if (enqueued > 1 && options.crawl && !added404) {
         added404 = true;
-        await addToQueue(`${basePath}${publicPath}/404.html`);
+        await addToQueue(`${basePath}${publicPath}/404.html`, false);
       }
     }
   };
@@ -358,7 +358,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
         if (options.waitFor) await page.waitForTimeout(options.waitFor);
         if (options.crawl) {
           const links = await getLinks({ page });
-          await Promise.all(links.map(addToQueue));
+          await Promise.all(links.map((l) => addToQueue(l, false)));
         }
         afterFetch && (await afterFetch({ page, route, addToQueue, logs }));
 
@@ -418,7 +418,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
   await cluster.task(async ({page, data: pageUrl}) => await fetchPage(page, pageUrl));
 
   if (options.include) {
-    await Promise.all(options.include.map(x => addToQueue(`${basePath}${x}`)));
+    await Promise.all(options.include.map(x => addToQueue(`${basePath}${x}`, false)));
   }
 
   waitForIdle = makeCancelable(cluster.idle());

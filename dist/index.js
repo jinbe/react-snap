@@ -5,20 +5,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 require("setimmediate");
+const clean_css_1 = __importDefault(require("clean-css"));
+const express_1 = __importDefault(require("express"));
+const express_history_api_fallback_1 = __importDefault(require("express-history-api-fallback"));
+const fs_1 = __importDefault(require("fs"));
+const html_minifier_1 = require("html-minifier");
+const http_1 = __importDefault(require("http"));
+const lodash_1 = require("lodash");
+const minimalcss_1 = __importDefault(require("minimalcss"));
+const mkdirp_1 = __importDefault(require("mkdirp"));
+const path_1 = __importDefault(require("path"));
+const serve_static_1 = __importDefault(require("serve-static"));
+const url_1 = __importDefault(require("url"));
 const defaults_1 = require("./defaults");
 const puppeteer_utils_1 = require("./puppeteer_utils");
-const http_1 = __importDefault(require("http"));
-const express_1 = __importDefault(require("express"));
-const serve_static_1 = __importDefault(require("serve-static"));
-const express_history_api_fallback_1 = __importDefault(require("express-history-api-fallback"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
-const mkdirp_1 = __importDefault(require("mkdirp"));
-const html_minifier_1 = require("html-minifier");
-const url_1 = __importDefault(require("url"));
-const minimalcss_1 = __importDefault(require("minimalcss"));
-const clean_css_1 = __importDefault(require("clean-css"));
-const lodash_1 = require("lodash");
 const { version } = require(`../package.json`);
 const normalizePath = path => (path === "/" ? "/" : path.replace(/\/$/, ""));
 /**
@@ -700,7 +700,7 @@ const run = async (userOptions, { fs } = { fs: fs_1.default }) => {
                     const redirect = `${routePath} -> ${newRoute}`;
                     redirects.push(redirect);
                     console.log(`💬  in browser redirect (${redirect})`);
-                    await addToQueue(`${basePath}${publicPath}${newRoute}`);
+                    await addToQueue(`${basePath}${publicPath}${newRoute}`, false);
                 }
             }
             if (Array.isArray(options.saveAs) ? options.saveAs.includes("png") : options.saveAs === "png") {
