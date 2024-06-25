@@ -282,7 +282,6 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
     if (exclude.filter(regex => regex.test(pathname)).length > 0) return;
     if (basePathHostname === hostname && isOnAppPort && (notUnique || !uniqueUrls.has(newUrl)) && !streamClosed) {
       uniqueUrls.add(newUrl);
-      console.log("Q  enqueue", newUrl, notUnique);
       enqueued++;
       await cluster.queue(newUrl);
       if (enqueued > 1 && options.crawl && !added404) {
@@ -394,7 +393,7 @@ export const crawl = async (opt: ICrawlParams): Promise<IReactSnapRunLogs[]> => 
       }
     } else {
       // this message creates a lot of noise if crawling enabled
-      console.log(`🚧  skipping (${processed + 1}/${enqueued}) ${route}`);
+      console.log(`🚧  skipping (${processed + 1}/${enqueued}) ${route}`, shuttingDown ? 'shutting down' : skipExistingFile ? 'existing' : 'neither');
     }
 
     processed++;
